@@ -1,0 +1,11 @@
+[33mcommit b4bf0c972615806dee2a566f1af26e887c852477[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m)[m
+Author: Vageesha Verma <vageeshaverma9@gmail.com>
+Date:   Fri Jan 16 18:03:20 2026 +0530
+
+    Remove secrets and update gitignore
+
+[33mcommit b3770f4d47e3f0674e07c0ba33d402bda74644b6[m
+Author: Vageesha Verma <vageeshaverma9@gmail.com>
+Date:   Fri Jan 16 18:00:15 2026 +0530
+
+    Initial commit

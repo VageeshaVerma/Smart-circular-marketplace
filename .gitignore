@@ -1,0 +1,13 @@
+# Secrets
+.env
+backend/firebase-service-account.json
+backend/*.pem
+backend/*.key
+
+# Python
+__pycache__/
+venv/
+
+# Node
+node_modules/
+dist/
