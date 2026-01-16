@@ -10,7 +10,11 @@ export default function Login() {
 
   const handleLogin = async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(auth, email, password);
+      const idToken = await userCredential.user.getIdToken(); // ✅ get UID
+
+      // ✅ Save token (uid) in localStorage
+      localStorage.setItem("token", idToken);
       navigate("/"); // Redirect to home after login
     } catch (err) {
       alert(err.message);

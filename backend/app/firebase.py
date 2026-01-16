@@ -15,5 +15,6 @@ def verify_token(token: str):
     try:
         decoded_token = auth.verify_id_token(token)
         return decoded_token  # contains uid, email, etc.
-    except Exception:
+    except Exception as e:
+        print("Token verification failed:", e)
         return None

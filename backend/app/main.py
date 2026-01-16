@@ -10,10 +10,17 @@ from app.database import create_db_and_tables
 
 app = FastAPI(title="Smart Circular Marketplace Prototype")
 
-# Allow frontend dev server (Vite) to access API
+# --- CORS configuration ---
+origins = [
+    "http://localhost:5173",  # frontend
+    "http://localhost:3000",
+    "http://localhost:5174",  # optional if you use React dev server default
+    "*",  # optional: allow all origins (for development only)
+]
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],
+    allow_origins=origins,      # or ["*"] for all
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,4 +35,4 @@ app.mount("/static", StaticFiles(directory=static_path), name="static")
 
 create_db_and_tables()
 
-app.include_router(endpoints.router, prefix=API_PREFIX)
+app.include_router(endpoints.router, prefix="/api")

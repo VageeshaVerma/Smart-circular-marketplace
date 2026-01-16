@@ -2,7 +2,6 @@
 import React, { useState } from "react";
 import axios from "axios";
 
-
 const API_BASE = "http://localhost:8000/api";
 
 export default function UploadForm() {
@@ -16,6 +15,7 @@ export default function UploadForm() {
   const [prediction, setPrediction] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  // Handle image file selection and preview
   function onImageChange(e) {
     const file = e.target.files?.[0];
     if (file) {
@@ -29,9 +29,11 @@ export default function UploadForm() {
     }
   }
 
+  // Form validation
   const isValidForPredict = () => category && condition && age !== "";
   const isValidForCreate = () => title && category && condition && age !== "";
 
+  // --- AI Prediction ---
   async function handlePredict(e) {
     e.preventDefault();
     if (!isValidForPredict()) {
@@ -53,26 +55,41 @@ export default function UploadForm() {
     }
   }
 
-  async function handleCreateListing(e) {
-    e.preventDefault();
+  // --- Create Listing ---
+  async function handleCreateListing() {
     if (!isValidForCreate()) {
       alert("Please fill all required fields before creating listing.");
       return;
     }
+
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("You must be logged in to create a listing.");
+      return;
+    }
+
     try {
       setLoading(true);
+
       const form = new FormData();
       form.append("title", title);
       form.append("category", category);
       form.append("age", Number(age));
       form.append("condition", condition);
       form.append("description", description || "");
+      form.append("price", prediction?.predicted_price ?? 0);
       if (imageFile) form.append("image", imageFile);
 
-      const res = await axios.post(`${API_BASE}/items`, form);
-      alert(`Listing created. Price: ₹${res.data.price}`);
+      const res = await axios.post(`${API_BASE}/items`, form, {
+        headers: {
+          "Authorization": `Bearer ${token}`, // Send token
+          "Content-Type": "multipart/form-data",
+        },
+      });
 
-      // reset form
+      alert(`Listing created successfully. Price: ₹${res.data.price}`);
+
+      // Reset form
       setTitle("");
       setCategory("");
       setAge("");
@@ -83,7 +100,7 @@ export default function UploadForm() {
       setPrediction(null);
     } catch (err) {
       console.error(err.response?.data || err);
-      alert("Create listing failed");
+      alert(err.response?.data?.detail || "Create listing failed");
     } finally {
       setLoading(false);
     }
@@ -93,11 +110,11 @@ export default function UploadForm() {
     <div className="upload-page">
       <div className="upload-wrap">
         <div className="upload-card" role="region" aria-label="Upload item">
+
           <div className="upload-card-left">
             <h2 className="upload-title">Upload Item & AI Suggestion</h2>
 
             <form className="upload-form" onSubmit={handlePredict}>
-
               <label className="field-label">Title</label>
               <input
                 className="field-input"
@@ -105,7 +122,6 @@ export default function UploadForm() {
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 placeholder="Enter item title"
-                aria-label="title"
               />
 
               <label className="field-label">Category</label>
@@ -113,7 +129,6 @@ export default function UploadForm() {
                 className="field-input"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                aria-label="category"
               >
                 <option value="" disabled hidden>Select Category</option>
                 <option value="electronics">Electronics</option>
@@ -127,7 +142,6 @@ export default function UploadForm() {
                 className="field-input"
                 value={condition}
                 onChange={(e) => setCondition(e.target.value)}
-                aria-label="condition"
               >
                 <option value="" disabled hidden>Select Condition</option>
                 <option value="Good">Good</option>
@@ -143,7 +157,6 @@ export default function UploadForm() {
                 onChange={(e) => setAge(e.target.value)}
                 placeholder="e.g., 2"
                 min="0"
-                aria-label="age"
               />
 
               <label className="field-label">Description (optional)</label>
@@ -155,34 +168,38 @@ export default function UploadForm() {
                 rows={4}
               />
 
-              <div className="file-row">
-                <div>
-                  <label className="field-label">Upload Image (optional)</label>
-                  <input className="file-input" type="file" accept="image/*" onChange={onImageChange} />
-                </div>
+              <label className="field-label">Upload Image (optional)</label>
+              <input type="file" accept="image/*" onChange={onImageChange} />
 
-                <div className="action-buttons">
-                  <button className={`btn primary ${loading ? "btn-disabled" : ""}`} type="submit" disabled={loading}>
-                    {loading ? "Processing..." : "Get AI Suggestion"}
-                  </button>
-
-                  <button
-                    className={`btn ghost ${loading ? "btn-disabled" : ""}`}
-                    type="button"
-                    onClick={handleCreateListing}
-                    disabled={loading}
-                  >
-                    {loading ? "Creating..." : "Create Listing"}
-                  </button>
-                </div>
+              <div className="action-buttons">
+                <button type="submit" className={`btn primary ${loading ? "btn-disabled" : ""}`} disabled={loading}>
+                  {loading ? "Processing..." : "Get AI Suggestion"}
+                </button>
+                <button
+                  type="button"
+                  className={`btn ghost ${loading ? "btn-disabled" : ""}`}
+                  onClick={handleCreateListing}
+                  disabled={loading}
+                >
+                  {loading ? "Creating..." : "Create Listing"}
+                </button>
               </div>
-
             </form>
 
             {prediction && (
               <div className="prediction">
                 <div><strong>Recommendation:</strong> {prediction.recommendation}</div>
-                <div><strong>Predicted Price:</strong> ₹{prediction.predicted_price}</div>
+                <div>
+                  <strong>Predicted Price:</strong> ₹
+                  <input
+                    type="number"
+                    value={prediction.predicted_price}
+                    onChange={(e) =>
+                      setPrediction({ ...prediction, predicted_price: Number(e.target.value) })
+                    }
+                    className="prediction-input"
+                  />
+                </div>
               </div>
             )}
           </div>
@@ -211,6 +228,7 @@ export default function UploadForm() {
               </ul>
             </div>
           </aside>
+
         </div>
       </div>
     </div>

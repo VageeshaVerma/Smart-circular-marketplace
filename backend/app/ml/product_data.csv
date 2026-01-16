@@ -1,0 +1,143 @@
+product_id,title,category,price,condition,age,co2_kg,resale_value,suggested_action
+E1001,Bluetooth Speaker,Electronics,49.99,Good,2,20,30,Repair
+E1002,4K Smart TV,Electronics,399.99,Average,4,230,300,Repair
+E1003,Laptop (Dell),Electronics,599.99,Fair,5,150,350,Repair
+E1004,Microwave Oven,Appliances,89.99,Poor,8,80,20,Recycle
+F1001,IKEA Sofa,Furniture,299.00,Good,3,100,180,Resell
+F1002,Dining Table,Furniture,150.00,Fair,6,60,80,Repair
+E1005,Old Smartphone,Electronics,59.90,Poor,6,30,40,Recycle
+F1003,Office Chair,Furniture,79.00,Good,2,40,50,Resell
+E1006,Digital Camera,Electronics,399.99,Average,2,50,100,Resell
+F1004,Bed Frame,Furniture,79.00,Good,2,30,40,Resell
+E1007,Tablet Samsung,Electronics,129.00,Fair,2,20,60,Repair
+E1008,Smart Watch,Electronics,499.99,Good,1,60,50,Repair
+E1009,Digital Camera Canon,Electronics,499.99,Average,1,20,100,Resell
+F1005,NV Speakers,Furniture,89.00,Good,3,25,95,Resell
+E1010,Tablet iPad,Electronics,129.00,Fair,3,60,160,Repair
+F1006,Table Top Glass,Furniture,399.99,Good,7,250,250,Repair
+F1007,Bed Tables,Furniture,129.00,Fair,8,100,160,Repair
+E1011,Microwave Oven LG,Appliances,99.99,Poor,19,30,86,Recycle
+F1008,Wooden Desk,Furniture,129.00,Good,4,80,60,Resell
+E1012,Air Fryer,Appliances,149.99,Good,2,35,120,Resell
+E1013,Refrigerator,Appliances,599.00,Average,5,450,350,Repair
+E1014,Washing Machine,Appliances,499.00,Fair,6,400,200,Repair
+F1009,Bedside Table,Furniture,49.99,Good,1,20,30,Resell
+E1015,Headphones,Electronics,29.99,Good,1,5,20,Repair
+F1010,Bookshelf,Furniture,199.00,Fair,7,80,100,Repair
+E1016,Portable Charger,Electronics,19.99,Good,1,2,15,Repair
+E1017,LED Desk Lamp,Electronics,24.99,Good,2,3,18,Repair
+F1011,Coffee Table,Furniture,129.00,Fair,5,60,80,Repair
+E1018,Smart Thermostat,Electronics,199.00,Average,3,50,120,Repair
+E1019,Wireless Mouse,Electronics,39.99,Good,1,2,25,Repair
+F1012,IKEA Wardrobe,Furniture,399.99,Good,4,150,300,Resell
+E1020,Blender,Appliances,69.99,Good,2,15,50,Resell
+E1021,Coffee Maker,Appliances,79.99,Average,3,20,45,Repair
+F1013,Recliner Chair,Furniture,299.99,Good,3,120,250,Resell
+E1022,Desktop Computer,Electronics,699.99,Good,2,200,450,Repair
+E1023,Smart Light Bulb,Electronics,14.99,Good,1,1,10,Repair
+F1014,Nightstand,Furniture,59.99,Good,2,15,35,Resell
+E1024,Electric Kettle,Appliances,29.99,Good,1,5,15,Resell
+F1015,TV Stand,Furniture,149.99,Fair,6,50,80,Repair
+E1025,Portable Speaker,Electronics,59.99,Average,2,10,40,Repair
+E1026,Smartphone Case,Electronics,9.99,Good,1,0,5,Repair
+F1016,Wooden Shelf,Furniture,79.99,Good,3,30,60,Resell
+E1027,Air Conditioner,Appliances,399.99,Fair,7,300,200,Repair
+E1028,Electric Fan,Appliances,49.99,Good,2,10,25,Resell
+F1017,Bed Frame Queen,Furniture,499.99,Good,5,120,250,Repair
+E1029,Smart Plug,Electronics,24.99,Good,1,3,12,Repair
+F1018,Dining Chair Set,Furniture,199.99,Fair,4,80,120,Repair
+E1030,Wireless Keyboard,Electronics,39.99,Good,1,2,20,Repair
+E1031,Toaster,Appliances,29.99,Good,2,5,15,Resell
+F1019,TV Cabinet,Furniture,349.99,Fair,6,150,200,Repair
+E1032,Game Console,Electronics,299.99,Good,2,100,200,Repair
+F1020,Bookshelf Large,Furniture,399.99,Good,3,100,250,Resell
+E1033,Noise Cancelling Headphones,Electronics,199.99,Good,1,10,50,Repair
+E1034,Espresso Machine,Appliances,349.99,Fair,4,80,150,Repair
+F1021,Armchair,Furniture,149.99,Good,2,50,100,Resell
+E1035,Smart Door Lock,Electronics,129.99,Average,3,30,80,Repair
+F1022,Bedside Cabinet,Furniture,79.99,Good,2,20,50,Resell
+E1036,Robot Vacuum,Appliances,299.99,Good,2,120,180,Repair
+E1037,Ceiling Fan,Appliances,149.99,Fair,3,40,100,Repair
+F1023,Office Desk,Furniture,199.99,Good,3,60,120,Resell
+E1038,Smart Light Switch,Electronics,39.99,Good,1,5,15,Repair
+E1039,Portable Air Purifier,Appliances,129.99,Fair,2,40,90,Repair
+F1024,Chest of Drawers,Furniture,249.99,Good,4,80,160,Resell
+E1040,Digital Photo Frame,Electronics,49.99,Good,1,5,20,Repair
+E1041,Smart Scale,Electronics,59.99,Good,1,3,25,Repair
+F1025,Coffee Table Round,Furniture,99.99,Good,2,25,60,Resell
+E1042,Electric Toothbrush,Appliances,39.99,Good,1,2,15,Repair
+F1026,Corner Shelf,Furniture,79.99,Fair,3,20,50,Repair
+E1043,Portable Projector,Electronics,199.99,Good,2,50,120,Repair
+F1027,Bar Stool Set,Furniture,149.99,Good,2,40,100,Resell
+E1044,Smartphone X,Electronics,499.99,Good,1,60,300,Repair
+E1045,Wireless Charger,Electronics,29.99,Good,1,3,15,Repair
+F1028,TV Stand Modern,Furniture,199.99,Fair,5,60,120,Repair
+E1046,Blender Pro,Appliances,79.99,Good,2,15,50,Resell
+F1029,Bookshelf Small,Furniture,59.99,Good,1,20,40,Resell
+E1047,Microwave Sharp,Appliances,129.99,Average,4,50,80,Repair
+F1030,Desk Organizer,Furniture,29.99,Good,1,5,15,Resell
+E1048,Smartphone Case Leather,Electronics,19.99,Good,1,1,10,Repair
+F1031,Dining Table Oak,Furniture,299.99,Fair,6,100,180,Repair
+E1049,Noise Cancelling Earbuds,Electronics,99.99,Good,1,5,30,Repair
+F1032,Recliner Sofa,Furniture,399.99,Good,3,150,300,Resell
+E1050,Air Purifier Pro,Appliances,149.99,Good,2,40,120,Repair
+F1033,Nightstand Minimalist,Furniture,49.99,Good,1,10,30,Resell
+E1051,Smart Doorbell,Electronics,129.99,Good,2,25,80,Repair
+F1034,Wooden Dining Chair,Furniture,59.99,Good,1,15,40,Resell
+E1052,Electric Kettle Stainless,Appliances,39.99,Good,1,5,20,Resell
+F1035,Bed Frame King,Furniture,499.99,Good,4,120,250,Repair
+E1053,Smart Thermostat Pro,Electronics,199.99,Average,3,50,120,Repair
+F1036,Office Chair Ergonomic,Furniture,149.99,Good,2,50,120,Resell
+E1054,LED Desk Lamp Adjustable,Electronics,24.99,Good,2,3,18,Repair
+F1037,TV Cabinet Walnut,Furniture,299.99,Good,3,120,200,Resell
+E1055,Robot Vacuum Cleaner,Appliances,299.99,Good,2,120,180,Repair
+F1038,Bookshelf Modern,Furniture,199.99,Good,3,80,150,Resell
+E1056,Smart Light Bulb Color,Electronics,19.99,Good,1,1,10,Repair
+F1039,Coffee Table Glass,Furniture,129.99,Good,2,40,90,Resell
+E1057,Wireless Headphones,Electronics,59.99,Good,1,5,25,Repair
+F1040,Dining Table Set,Furniture,399.99,Fair,6,150,250,Repair
+E1058,Blender Smoothie,Appliances,69.99,Good,2,15,50,Resell
+F1041,Corner Sofa,Furniture,499.99,Good,4,200,350,Resell
+E1059,Smartwatch Fitness,Electronics,129.99,Good,1,10,60,Repair
+F1042,Nightstand Set,Furniture,79.99,Good,2,20,50,Resell
+E1060,Digital Camera Lens,Electronics,199.99,Good,1,5,80,Repair
+F1043,Office Desk Modern,Furniture,199.99,Good,3,60,120,Resell
+E1061,Electric Fan Tower,Appliances,49.99,Good,2,10,25,Resell
+F1044,Bookshelf Corner,Furniture,149.99,Fair,4,60,120,Repair
+E1062,Smartphone Screen Protector,Electronics,9.99,Good,1,0,5,Repair
+F1045,Recliner Sofa Leather,Furniture,599.99,Good,3,200,350,Resell
+E1063,Microwave Oven LG,Appliances,99.99,Average,4,30,80,Repair
+F1046,Coffee Table Set,Furniture,129.99,Good,2,40,90,Resell
+E1064,Smart Plug WiFi,Electronics,24.99,Good,1,3,12,Repair
+F1047,Dining Chair Oak,Furniture,79.99,Good,1,15,40,Resell
+E1065,Portable Charger Fast,Electronics,19.99,Good,1,2,15,Repair
+F1048,Bedside Cabinet Oak,Furniture,99.99,Good,2,25,60,Resell
+E1066,LED Floor Lamp,Electronics,49.99,Good,2,5,20,Repair
+F1049,TV Stand Walnut,Furniture,149.99,Good,3,50,100,Resell
+E1067,Smartphone X Pro,Electronics,599.99,Good,1,80,400,Repair
+F1050,Bookshelf Small Oak,Furniture,89.99,Good,2,30,70,Resell
+E1068,Headphones Noise Cancelling,Electronics,129.99,Good,1,10,50,Repair
+F1051,Dining Table Glass,Furniture,299.99,Fair,5,100,180,Repair
+E1069,Air Fryer Deluxe,Appliances,149.99,Good,2,35,120,Resell
+F1052,Coffee Table Modern,Furniture,129.99,Good,3,40,90,Resell
+E1070,Smartwatch Classic,Electronics,99.99,Good,1,5,40,Repair
+F1053,Office Chair Leather,Furniture,199.99,Good,3,80,160,Resell
+E1071,Electric Toothbrush Pro,Appliances,49.99,Good,1,2,15,Repair
+F1054,Bed Frame Single,Furniture,249.99,Good,4,80,160,Repair
+E1072,Smart Door Lock Pro,Electronics,129.99,Average,2,30,80,Repair
+F1055,Nightstand White,Furniture,59.99,Good,1,15,40,Resell
+E1073,Robot Vacuum X,Appliances,349.99,Good,2,150,200,Repair
+F1056,Dining Chair Set Oak,Furniture,199.99,Fair,3,60,120,Repair
+E1074,Smart Light Bulb Tunable,Electronics,24.99,Good,1,2,10,Repair
+F1057,Bookshelf Minimalist,Furniture,149.99,Good,2,50,100,Resell
+E1075,Portable Air Purifier Pro,Appliances,129.99,Good,2,40,90,Repair
+F1058,Recliner Chair Leather,Furniture,299.99,Good,3,120,250,Resell
+E1076,Smart Thermostat Mini,Electronics,199.99,Average,3,50,120,Repair
+F1059,Nightstand Small,Furniture,49.99,Good,1,10,30,Resell
+E1077,LED Desk Lamp Modern,Electronics,29.99,Good,2,3,18,Repair
+F1060,Coffee Table Round Oak,Furniture,99.99,Good,2,25,60,Resell
+E1078,Blender Kitchen Pro,Appliances,89.99,Good,2,15,50,Resell
+F1061,Bookshelf Tall,Furniture,199.99,Good,3,80,150,Resell
+E1079,Smart Plug Mini,Electronics,19.99,Good,1,2,10,Repair
+F1062,TV Cabinet Oak,Furniture,349.99,Fair,4,150,200,Repair
+E1080,Wireless Mouse Pro,Electronics,39.99,Good,1,2,20,Repair

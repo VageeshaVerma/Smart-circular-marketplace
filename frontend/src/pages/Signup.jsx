@@ -12,10 +12,11 @@ export default function Signup() {
   const handleSignup = async () => {
     try {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-      const uid = userCredential.user.uid;
+      const idToken = await userCredential.user.getIdToken();
+      const uid = userCredential.user.uid; // ✅ Fix
 
-      // Optional: store user in backend
-      await axios.post("http://localhost:8000/api/signup", { uid, email });
+      await axios.post("http://localhost:8000/api/signup", { uid, email }); 
+      localStorage.setItem("token", idToken);
 
       alert("Signup successful!");
       navigate("/login"); // Redirect to login page after signup
