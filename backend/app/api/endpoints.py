@@ -23,7 +23,8 @@ from app.schemas import AISuggestion
 router = APIRouter()
 security = HTTPBearer()
 # Base URL & image directory
-BACKEND_BASE = "http://localhost:8000"
+BACKEND_BASE = os.getenv("BACKEND_URL", "http://localhost:8000")
+
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "..", "static", "images")
 IMAGE_DIR = os.path.abspath(IMAGE_DIR)
 os.makedirs(IMAGE_DIR, exist_ok=True)
@@ -169,13 +170,13 @@ async def list_items():
     return items
 
 # --- Get single item ---
-@router.get("/items/{item_id}", response_model=ItemDB)
-async def get_item(item_id: int):
-    with get_session() as session:
-        item = session.get(ItemDB, item_id)
-        if not item:
-            raise HTTPException(status_code=404, detail="Item not found")
-    return item
+@router.get("/items/{item_id}", response_model=ItemDB) 
+async def get_item(item_id: int): 
+    with get_session() as session: 
+        item = session.get(ItemDB, item_id) 
+        if not item: 
+            raise HTTPException(status_code=404, detail="Item not found") 
+        return item
 
 # --- Delete item ---
 @router.delete("/items/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
