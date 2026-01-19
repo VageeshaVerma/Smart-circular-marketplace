@@ -1,19 +1,27 @@
 # backend/app/api/endpoints.py
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends, status, Body
+from fastapi import APIRouter, UploadFile, File, Form, HTTPException, Depends, status, Body, FastAPI
 from typing import List, Optional
 from uuid import uuid4
+from app.models.order import OrderDB
+from app.schemas import Order, ItemCreate, ItemResponse
+from app.models_db import ItemDB
+from app.deps import get_current_user
+from sqlalchemy.orm import Session
+from fastapi.security import HTTPBearer
 import os, shutil
 from app.store import USERS
 from sqlmodel import select
 from app.database import get_session
-from app.models_db import ItemDB
+from pydantic import BaseModel
+from app.ml.predict import predict_product_decision
 from app.services.osm import fetch_nearby_services
-from app.deps import get_current_user
-from app.ai_sim import predict_price
-from app.models import AISuggestion
+from app.ml.predict import predict_product_decision
+
+from app.schemas import AISuggestion
+
 
 router = APIRouter()
-
+security = HTTPBearer()
 # Base URL & image directory
 BACKEND_BASE = "http://localhost:8000"
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "..", "static", "images")
@@ -28,6 +36,8 @@ from pydantic import BaseModel
 class SignupRequest(BaseModel):
     uid: str
     email: str
+class StatusUpdate(BaseModel):
+    status: str
 
 @router.post("/signup")
 async def signup(request: SignupRequest):
@@ -40,17 +50,36 @@ class AIPredictRequest(BaseModel):
     age: int
     condition: str
     category: str
+    price: float
+    co2_kg: float
     adjusted_price: Optional[float] = None
 
+class ProductInput(BaseModel):
+    title: str
+    category: str
+    price: float
+    condition: str
+    age: int
+    co2_kg: float    
+    adjusted_price: Optional[float] = None 
+
+# 🔹 FRONTEND AI ENDPOINT
 @router.post("/ai/predict", response_model=AISuggestion)
-async def ai_predict(payload: AIPredictRequest = Body(...)):
-    suggested_price = predict_price(payload.age, payload.condition, payload.category)
+async def ai_predict(payload: AIPredictRequest):
+    # Call the unified prediction function
+    result = predict_product_decision(
+        category=payload.category,
+        price=payload.price,
+        condition=payload.condition,
+        age=payload.age,
+        co2_kg=payload.co2_kg
+    )
 
-    # Override predicted price if frontend provides adjusted_price
+    # Optional manual override from frontend
     if payload.adjusted_price is not None:
-        suggested_price["predicted_price"] = payload.adjusted_price
+        result["predicted_resale_value"] = payload.adjusted_price
 
-    return suggested_price
+    return result
 
 # --- Create item (multipart/form-data, optional image) ---
 @router.post("/items", status_code=status.HTTP_201_CREATED, response_model=ItemDB)
@@ -60,15 +89,13 @@ async def create_item(
     age: int = Form(...),
     condition: str = Form(...),
     description: str = Form(""),
-    price: float = Form(...),  # <-- Pass AI predicted or adjusted price from frontend
+    price: float = Form(...),
     image: UploadFile = File(None),
-    user=Depends(get_current_user)
+    user=Depends(get_current_user),
 ):
-    """
-    Accepts multipart/form-data with optional image file.
-    Saves image to app/static/images and returns item with price and image_url.
-    """
+    seller_uid = user["uid"]  # ✅ removed comma
     image_url = None
+
     if image is not None:
         filename = image.filename or "upload.jpg"
         _, ext = os.path.splitext(filename)
@@ -89,8 +116,9 @@ async def create_item(
         age=age,
         condition=condition,
         description=description,
-        price=price,  # Use frontend-provided (predicted/adjusted) price
+        price=price,
         image_url=image_url,
+        seller_uid=seller_uid,
     )
 
     with get_session() as session:
@@ -99,6 +127,7 @@ async def create_item(
         session.refresh(item)
 
     return item
+
 
 # --- List items ---
 @router.get("/items", response_model=List[ItemDB])
@@ -137,7 +166,7 @@ async def delete_item(item_id: int):
     return None
 
 # --- Nearby / Impact ---
-from app.db import NEARBY_SERVICES, USER_IMPACT
+
 
 @router.get("/nearby")
 async def nearby_services(lat: float, lng: float, type: str = "all"):
@@ -166,3 +195,69 @@ async def category_stats(user_id: str):
 @router.get("/me")
 async def get_profile(user=Depends(get_current_user)):
     return {"uid": user["uid"], "email": user.get("email")}
+
+
+@router.post("/orders", status_code=status.HTTP_201_CREATED)
+def create_order(
+    data: dict,
+    session: Session = Depends(get_session),
+    user=Depends(get_current_user)
+):
+    item = session.get(ItemDB, data["item_id"])
+    if not item:
+        raise HTTPException(status_code=404, detail="Item not found")
+
+    order = OrderDB(
+        item_id=item.id,
+        buyer_uid=user["uid"],
+        seller_uid=item.seller_uid,
+        price=item.price,
+        status="PENDING"
+    )
+
+    session.add(order)
+    session.delete(item)
+    session.commit()
+    session.refresh(order)
+
+    return order
+
+@router.get("/orders")
+def list_orders(session=Depends(get_session), user=Depends(get_current_user)):
+    stmt = select(OrderDB).where(
+        (OrderDB.buyer_uid == user["uid"]) |
+        (OrderDB.seller_uid == user["uid"])
+    ).order_by(OrderDB.created_at.desc())
+
+    return session.exec(stmt).all()
+
+@router.patch("/orders/{order_id}")
+def update_order_status(
+    order_id: int,
+    data: dict,
+    session=Depends(get_session),
+    user=Depends(get_current_user)
+):
+    order = session.get(OrderDB, order_id)
+    if not order:
+        raise HTTPException(status_code=404, detail="Order not found")
+
+    if user["uid"] != order.seller_uid:
+        raise HTTPException(status_code=403, detail="Only seller can update status")
+
+    order.status = data["status"]
+    session.add(order)
+    session.commit()
+
+    return {"success": True}
+
+@router.post("/predict")
+def predict_product(data: ProductInput):
+    return predict_product_decision(
+        title=data.title,
+        category=data.category,
+        price=data.price,
+        condition=data.condition,
+        age=data.age,
+        co2_kg=data.co2_kg
+    )

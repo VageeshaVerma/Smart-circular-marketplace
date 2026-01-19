@@ -11,3 +11,4 @@ class ItemDB(SQLModel, table=True):
     description: Optional[str] = ""
     price: float
     image_url: Optional[str] = None
+    seller_uid: str = "demo"

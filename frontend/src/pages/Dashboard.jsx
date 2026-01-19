@@ -1,30 +1,44 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-
+import Marketplace from "./Marketplace";
 import OverviewCards from "../components/dashboard/OverviewCards";
 import MyListings from "../components/dashboard/MyListings";
 import SmartRecommendations from "../components/dashboard/SmartRecommendations";
 import RecentActivity from "../components/dashboard/RecentActivity";
 import SustainabilityScore from "../components/dashboard/SustainabilityScore";
-
+import { getAuthToken } from "../utils/getAuthToken";
 const API_BASE = "http://localhost:8000/api";
 
 export default function Dashboard() {
   const [impact, setImpact] = useState(null);
+  const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const res = await axios.get(`${API_BASE}/impact?user_id=demo`);
-        setImpact(res.data);
-      } catch (err) {
-        console.error("Dashboard API error:", err);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchOrders = async () => {
+    try {
+      const token = await getAuthToken();
+      const res = await axios.get(`${API_BASE}/orders`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setOrders(res.data);
+    } catch (err) {
+      console.error("Failed to fetch orders", err);
+    }
+  };
 
+  const fetchDashboardData = async () => {
+    try {
+      const res = await axios.get(`${API_BASE}/impact?user_id=demo`);
+      setImpact(res.data);
+    } catch (err) {
+      console.error("Dashboard API error:", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchOrders();
     fetchDashboardData();
   }, []);
 
@@ -37,7 +51,7 @@ export default function Dashboard() {
       <h1 className="text-2xl font-bold">Dashboard</h1>
       
       {/* TOP OVERVIEW METRICS */}
-      <OverviewCards impact={impact} />
+      <OverviewCards orders={orders} />
 
       {/* USER LISTINGS */}
       <MyListings />
@@ -46,7 +60,7 @@ export default function Dashboard() {
       <SmartRecommendations />
 
       {/* ACTIVITY LOG */}
-      <RecentActivity />
+      <RecentActivity orders={orders} refreshOrders={fetchOrders} />
 
       {/* SUSTAINABILITY SCORE */}
       <SustainabilityScore impact={impact} />

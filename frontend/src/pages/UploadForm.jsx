@@ -1,7 +1,7 @@
 // frontend/src/pages/UploadForm.jsx
 import React, { useState } from "react";
 import axios from "axios";
-
+import { getAuthToken } from "../utils/getAuthToken";
 const API_BASE = "http://localhost:8000/api";
 
 export default function UploadForm() {
@@ -42,11 +42,15 @@ export default function UploadForm() {
     }
     try {
       setLoading(true);
-      const payload = { category, condition, age: Number(age) };
+      const payload = { category, condition, age: Number(age),price: 1000, co2_kg: 50   };
       const res = await axios.post(`${API_BASE}/ai/predict`, payload, {
         headers: { "Content-Type": "application/json" },
       });
-      setPrediction(res.data);
+      setPrediction({
+        recommendation: res.data.recommendation,
+        predicted_price: res.data.predicted_price
+      });
+
     } catch (err) {
       console.error(err);
       alert("Prediction failed");
@@ -62,11 +66,16 @@ export default function UploadForm() {
       return;
     }
 
-    const token = localStorage.getItem("token");
-    if (!token) {
-      alert("You must be logged in to create a listing.");
-      return;
-    }
+    
+
+let token;
+try {
+  token = await getAuthToken();
+} catch (err) {
+  alert("You must be logged in to create a listing.");
+  return;
+}
+
 
     try {
       setLoading(true);

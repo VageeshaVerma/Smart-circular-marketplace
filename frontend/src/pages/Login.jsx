@@ -11,7 +11,7 @@ export default function Login() {
   const handleLogin = async () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
-      const idToken = await userCredential.user.getIdToken(); // ✅ get UID
+      const idToken = await userCredential.user.getIdToken(true); // ✅ get UID
 
       // ✅ Save token (uid) in localStorage
       localStorage.setItem("token", idToken);

@@ -1,5 +1,7 @@
+# app/schemas.py
 from pydantic import BaseModel
-from typing import Literal
+from typing import Literal, Optional
+
 class ItemCreate(BaseModel):
     title: str
     category: str
@@ -30,4 +32,13 @@ class Order(BaseModel):
     id: int
     item_id: int
     buyer_uid: str
-    status: Literal["PENDING", "CONFIRMED", "COMPLETED"]  # minimal statuses
+    status: Literal["PENDING", "CONFIRMED", "COMPLETED"]
+
+class AIPredictRequest(BaseModel):
+    title: str
+    category: str
+    price: float
+    condition: str
+    age: int
+    co2_kg: float
+    adjusted_price: Optional[float] = None   

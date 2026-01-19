@@ -1,9 +1,36 @@
-export default function OverviewCards() {
+// frontend/src/components/dashboard/OverviewCards.jsx
+import React from "react";
+
+export default function OverviewCards({ orders = [] }) {
+  // 📊 Derived Metrics
+  const totalSold = orders.length;
+  const totalCompleted = orders.filter((o) => o.status === "COMPLETED").length;
+  const co2Saved = totalCompleted * 2; // mock sustainability logic
+  const totalEarnings = orders
+    .filter((o) => o.status === "COMPLETED")
+    .reduce((sum, o) => sum + o.price, 0); // ✅ dynamic earnings from backend
+
   const stats = [
-    { title: "Items Sold / Bought", value: "18 / 25", icon: "♻️" },
-    { title: "Total Earnings / Savings", value: "₹8,400", icon: "💰" },
-    { title: "CO₂ Saved", value: "42 kg", icon: "🌱" },
-    { title: "Items Reused / Repaired", value: "31", icon: "🔁" },
+    {
+      title: "Items Sold",
+      value: totalSold,
+      icon: "🛒",
+    },
+    {
+      title: "Orders Completed",
+      value: totalCompleted,
+      icon: "✅",
+    },
+    {
+      title: "CO₂ Saved",
+      value: `${co2Saved} kg`,
+      icon: "🌱",
+    },
+    {
+      title: "Total Earnings",
+      value: `₹${totalEarnings}`,
+      icon: "💰",
+    },
   ];
 
   return (
