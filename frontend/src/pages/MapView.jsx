@@ -13,7 +13,7 @@ L.Icon.Default.mergeOptions({
   iconUrl,
   shadowUrl: iconShadow,
 });
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 // Custom colored markers (optional)
 const repairIcon = new L.Icon({
   iconUrl: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
@@ -29,7 +29,7 @@ const recyclingIcon = new L.Icon({
   popupAnchor: [0, -32],
 });
 
-const API_BASE = "http://localhost:8000/api";
+const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
 
 export default function MapView() {
   const [services, setServices] = useState([]);
@@ -56,7 +56,7 @@ export default function MapView() {
   // Fetch nearby services
   useEffect(() => {
     axios
-      .get(`${API_BASE}/nearby/osm?lat=${userLocation.lat}&lng=${userLocation.lng}`)
+      .get(`${BACKEND_URL}/nearby/osm?lat=${userLocation.lat}&lng=${userLocation.lng}`)
       .then((res) => {
         // Sort by nearest first
         const sorted = res.data.sort((a, b) => a.distance_km - b.distance_km);

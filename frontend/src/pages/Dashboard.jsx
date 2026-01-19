@@ -7,8 +7,8 @@ import SmartRecommendations from "../components/dashboard/SmartRecommendations";
 import RecentActivity from "../components/dashboard/RecentActivity";
 import SustainabilityScore from "../components/dashboard/SustainabilityScore";
 import { getAuthToken } from "../utils/getAuthToken";
-const API_BASE = "http://localhost:8000/api";
-
+const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Dashboard() {
   const [impact, setImpact] = useState(null);
   const [orders, setOrders] = useState([]);
@@ -17,7 +17,7 @@ export default function Dashboard() {
   const fetchOrders = async () => {
     try {
       const token = await getAuthToken();
-      const res = await axios.get(`${API_BASE}/orders`, {
+      const res = await axios.get(`${BACKEND_URL}/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await axios.get(`${API_BASE}/impact?user_id=demo`);
+      const res = await axios.get(`const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;/impact?user_id=demo`);
       setImpact(res.data);
     } catch (err) {
       console.error("Dashboard API error:", err);

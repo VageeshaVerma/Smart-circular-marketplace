@@ -3,8 +3,8 @@ import React from "react";
 import { getAuthToken } from "../../utils/getAuthToken";
 import axios from "axios";
 
-const API_BASE = "http://localhost:8000/api";
-
+const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function RecentActivity({ orders, refreshOrders }) {
   const changeStatus = async (orderId, newStatus) => {
     let token;
@@ -16,7 +16,7 @@ export default function RecentActivity({ orders, refreshOrders }) {
 
     try {
       await axios.patch(
-        `${API_BASE}/orders/${orderId}`,
+        `${BACKEND_URL}/orders/${orderId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

@@ -2,8 +2,8 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getAuthToken } from "../utils/getAuthToken";
-const API_BASE = "http://localhost:8000/api";
-
+const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function UploadForm() {
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("");
@@ -43,7 +43,7 @@ export default function UploadForm() {
     try {
       setLoading(true);
       const payload = { category, condition, age: Number(age),price: 1000, co2_kg: 50   };
-      const res = await axios.post(`${API_BASE}/ai/predict`, payload, {
+      const res = await axios.post(`${BACKEND_URL}/ai/predict`, payload, {
         headers: { "Content-Type": "application/json" },
       });
       setPrediction({
@@ -89,7 +89,7 @@ try {
       form.append("price", prediction?.predicted_price ?? 0);
       if (imageFile) form.append("image", imageFile);
 
-      const res = await axios.post(`${API_BASE}/items`, form, {
+      const res = await axios.post(`${BACKEND_URL}/items`, form, {
         headers: {
           "Authorization": `Bearer ${token}`, // Send token
           "Content-Type": "multipart/form-data",

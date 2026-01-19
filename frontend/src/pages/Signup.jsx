@@ -15,7 +15,7 @@ export default function Signup() {
       const idToken = await userCredential.user.getIdToken();
       const uid = userCredential.user.uid; // ✅ Fix
 
-      await axios.post("http://localhost:8000/api/signup", { uid, email }); 
+      await axios.post("http://smart-circular-marketplace-2.onrender.com/api/signup", { uid, email }); 
       localStorage.setItem("token", idToken);
 
       alert("Signup successful!");

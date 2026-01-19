@@ -3,8 +3,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getAuthToken } from "../utils/getAuthToken";
 
-const API_BASE = "http://localhost:8000/api";
-
+const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Marketplace({ refreshOrders }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function Marketplace({ refreshOrders }) {
         token = null; // Not logged in
       }
 
-      const res = await axios.get(`${API_BASE}/items`, {
+      const res = await axios.get(`${BACKEND_URL}/items`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setItems(res.data);
@@ -44,7 +44,7 @@ export default function Marketplace({ refreshOrders }) {
     try {
       const token = await getAuthToken(); // fresh token
 
-      await axios.delete(`${API_BASE}/items/${id}`, {
+      await axios.delete(`${BACKEND_URL}/items/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -68,7 +68,7 @@ export default function Marketplace({ refreshOrders }) {
       const token = await getAuthToken(); // fresh token
 
       const res = await axios.post(
-        `${API_BASE}/orders`,
+        `${BACKEND_URL}/orders`,
         { item_id: itemId, price: item.price },
         { headers: { Authorization: `Bearer ${token}` } }
       );
