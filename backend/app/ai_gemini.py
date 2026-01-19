@@ -1,9 +1,12 @@
 import google.genai as genai
 import os
 
-genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
+API_KEY = os.getenv("GENAI_API_KEY")
+model = genai.TextGenerationModel.from_pretrained(
+    "models/gemini-2.5-flash",
+    api_key=API_KEY
+)
 
-model = genai.GenerativeModel("models/gemini-2.5-flash")
 
 def get_gemini_recommendation(prompt: str) -> str:
     try:
