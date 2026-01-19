@@ -16,7 +16,7 @@ from pydantic import BaseModel
 from app.ml.predict import predict_product_decision
 from app.services.osm import fetch_nearby_services
 from app.ml.predict import predict_product_decision
-
+from app.ai_gemini import get_gemini_recommendation
 from app.schemas import AISuggestion
 
 
@@ -47,6 +47,7 @@ async def signup(request: SignupRequest):
 
 # --- AI Prediction with optional adjustment ---
 class AIPredictRequest(BaseModel):
+    title: Optional[str] = None
     age: int
     condition: str
     category: str
@@ -66,7 +67,9 @@ class ProductInput(BaseModel):
 # 🔹 FRONTEND AI ENDPOINT
 @router.post("/ai/predict", response_model=AISuggestion)
 async def ai_predict(payload: AIPredictRequest):
-    # Call the unified prediction function
+    
+
+    # Step 1: Call the prediction function
     result = predict_product_decision(
         category=payload.category,
         price=payload.price,
@@ -75,11 +78,40 @@ async def ai_predict(payload: AIPredictRequest):
         co2_kg=payload.co2_kg
     )
 
-    # Optional manual override from frontend
+    # Step 2: Optional override from frontend
     if payload.adjusted_price is not None:
         result["predicted_resale_value"] = payload.adjusted_price
 
-    return result
+    # Step 3: Safely access predicted price
+    predicted_price = result.get("predicted_resale_value")
+    if predicted_price is None:
+        # Fallback if AI/model fails
+        predicted_price = payload.price * 0.8
+        recommendation = "Fallback recommendation: item in good condition, sell soon"
+        co2_saved_estimate = payload.co2_kg * 0.7
+    else:
+        recommendation = result.get("recommendation", "")
+        co2_saved_estimate = result.get("co2_saved_estimate", 0)
+
+    # Step 4: Call OpenAI API safely
+    ai_suggestion = recommendation  # default to model/fallback
+    prompt = (
+        f"Provide a one-line suggestion for this item: "
+        f"Category='{payload.category}', "
+        f"Condition='{payload.condition}', Age={payload.age}"
+    )
+    try:
+        ai_suggestion = get_gemini_recommendation(prompt)
+    except Exception as e:
+        print("OpenAI API error:", e)
+        # Keep previous fallback recommendation if AI fails
+
+    # Step 5: Return response
+    return {
+        "predicted_price": predicted_price,
+        "recommendation": ai_suggestion,
+        "co2_saved_estimate": co2_saved_estimate
+    }
 
 # --- Create item (multipart/form-data, optional image) ---
 @router.post("/items", status_code=status.HTTP_201_CREATED, response_model=ItemDB)

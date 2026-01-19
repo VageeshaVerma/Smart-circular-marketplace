@@ -35,7 +35,7 @@ class Order(BaseModel):
     status: Literal["PENDING", "CONFIRMED", "COMPLETED"]
 
 class AIPredictRequest(BaseModel):
-    title: str
+    
     category: str
     price: float
     condition: str

@@ -13,6 +13,7 @@ le_condition = bundle["le_condition"]
 le_category = bundle["le_category"]
 
 def predict_product_decision(
+    title: str, 
     category: str,
     price: float,
     condition: str,
@@ -59,7 +60,7 @@ def predict_product_decision(
 
     # Return unified response
     return {
-        "predicted_price": round(predicted_resale, 2),
+        "predicted_resale_value": round(predicted_resale, 2),
         "recommendation": action,
         "co2_saved_estimate": co2_saved
     }

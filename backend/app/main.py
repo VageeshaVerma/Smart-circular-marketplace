@@ -4,9 +4,11 @@ from fastapi.staticfiles import StaticFiles
 from app.api import endpoints
 from app.api.endpoints import router as api_router
 from app.database import create_db_and_tables
+from dotenv import load_dotenv
 import os
 from contextlib import asynccontextmanager
-
+load_dotenv()
+openai_api_key = os.getenv("OPENAI_API_KEY")
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Startup
