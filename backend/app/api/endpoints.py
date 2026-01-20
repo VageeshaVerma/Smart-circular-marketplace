@@ -66,7 +66,7 @@ class ProductInput(BaseModel):
     adjusted_price: Optional[float] = None 
 
 # 🔹 FRONTEND AI ENDPOINT
-@router.post("/api/ai/predict", response_model=AISuggestion)
+@router.post("/ai/predict", response_model=AISuggestion)
 async def ai_predict(payload: AIPredictRequest):
 
     # Step 1: Call ML / rule-based decision engine
