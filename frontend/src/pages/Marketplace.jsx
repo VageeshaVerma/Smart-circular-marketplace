@@ -112,7 +112,7 @@ export default function Marketplace({ refreshOrders }) {
             <div key={it.id} className="marketplace-card" style={{ padding: 12 }}>
               {it.image_url ? (
                 <img
-                  src={`https://api.smart-circular-marketplace.com${it.image_url}`}
+                  src={`${BASE_URL}${it.image_url}`}
                   alt={it.title}
                   className="marketplace-img"
                   style={{
