@@ -29,7 +29,7 @@ const recyclingIcon = new L.Icon({
   popupAnchor: [0, -32],
 });
 
-const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+
 
 export default function MapView() {
   const [services, setServices] = useState([]);

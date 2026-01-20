@@ -2,10 +2,11 @@
 import React, { useState } from "react";
 import axios from "axios";
 import { getAuthToken } from "../utils/getAuthToken";
-const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function UploadForm() {
   const [title, setTitle] = useState("");
+  const [price, setPrice] = useState("");
   const [category, setCategory] = useState("");
   const [age, setAge] = useState("");
   const [condition, setCondition] = useState("");
@@ -30,26 +31,29 @@ export default function UploadForm() {
   }
 
   // Form validation
-  const isValidForPredict = () => category && condition && age !== "";
+  const isValidForPredict = () => category && condition && age !== "" && price !== "";
   const isValidForCreate = () => title && category && condition && age !== "";
 
   // --- AI Prediction ---
   async function handlePredict(e) {
     e.preventDefault();
     if (!isValidForPredict()) {
-      alert("Please fill category, condition, and age for prediction.");
+      alert("Please fill category, condition,price, and age for prediction.");
       return;
     }
     try {
       setLoading(true);
-      const payload = { category, condition, age: Number(age),price: 1000, co2_kg: 50   };
-      const res = await axios.post(`${BACKEND_URL}/ai/predict`, payload, {
+      const payload = { category, condition, age: Number(age),price: Number(price), co2_kg: 50   };
+      const res = await axios.post(`${BACKEND_URL}/api/ai/predict`, payload, {
         headers: { "Content-Type": "application/json" },
       });
       setPrediction({
-        recommendation: res.data.recommendation,
-        predicted_price: res.data.predicted_price
+       action: res.data.action,
+       explanation: res.data.explanation,
+       predicted_price: res.data.predicted_price,
+       co2_saved_estimate: res.data.co2_saved_estimate
       });
+
 
     } catch (err) {
       console.error(err);
@@ -145,6 +149,9 @@ try {
                 <option value="appliance">Appliance</option>
                 <option value="other">Other</option>
               </select>
+              <label className="field-label">Expected Price (₹)</label>
+              <input className="field-input" type="number" value={price}  onChange={(e) => setPrice(e.target.value)}  placeholder="e.g., 45000" min="0"/>
+
 
               <label className="field-label">Condition</label>
               <select
@@ -196,21 +203,39 @@ try {
             </form>
 
             {prediction && (
-              <div className="prediction">
-                <div><strong>Recommendation:</strong> {prediction.recommendation}</div>
-                <div>
-                  <strong>Predicted Price:</strong> ₹
-                  <input
-                    type="number"
-                    value={prediction.predicted_price}
-                    onChange={(e) =>
-                      setPrediction({ ...prediction, predicted_price: Number(e.target.value) })
-                    }
-                    className="prediction-input"
-                  />
-                </div>
-              </div>
-            )}
+  <div className="prediction">
+    <div>
+      <strong>AI Decision:</strong>{" "}
+      <span className={`badge badge-${prediction.action.toLowerCase()}`}>
+        {prediction.action}
+      </span>
+    </div>
+
+    <div className="prediction-explanation">
+      {prediction.explanation}
+    </div>
+
+    <div>
+      <strong>Predicted Price:</strong> ₹
+      <input
+        type="number"
+        value={prediction.predicted_price}
+        onChange={(e) =>
+          setPrediction({
+            ...prediction,
+            predicted_price: Number(e.target.value)
+          })
+        }
+        className="prediction-input"
+      />
+    </div>
+
+    <div className="co2">
+      🌱 CO₂ Saved: {prediction.co2_saved_estimate} kg
+    </div>
+  </div>
+)}
+
           </div>
 
           <aside className="upload-card-right" aria-hidden>

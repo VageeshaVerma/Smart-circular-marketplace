@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import axios from "axios";
-
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Signup() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -15,7 +15,7 @@ export default function Signup() {
       const idToken = await userCredential.user.getIdToken();
       const uid = userCredential.user.uid; // ✅ Fix
 
-      await axios.post("http://smart-circular-marketplace-2.onrender.com/api/signup", { uid, email }); 
+      await axios.post(`${BACKEND_URL}/api/signup`, { uid, email }, { headers: { Authorization: `Bearer ${idToken}` } }); 
       localStorage.setItem("token", idToken);
 
       alert("Signup successful!");

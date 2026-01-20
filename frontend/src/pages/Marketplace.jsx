@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { getAuthToken } from "../utils/getAuthToken";
 
-const API_BASE = "http://smart-circular-marketplace-2.onrender.com/api";
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Marketplace({ refreshOrders }) {
   const [items, setItems] = useState([]);
