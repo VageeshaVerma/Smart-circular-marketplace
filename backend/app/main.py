@@ -7,6 +7,9 @@ from app.api.endpoints import router as api_router
 from app.database import create_db_and_tables
 from dotenv import load_dotenv
 import os
+import cloudinary
+import cloudinary.uploader
+import cloudinary.api
 from contextlib import asynccontextmanager
 BACKEND_BASE = os.getenv("BACKEND_URL", "http://localhost:8000")
 load_dotenv()
@@ -21,6 +24,13 @@ async def lifespan(app: FastAPI):
     print("🛑 App shutdown")
 def get_image_url(request: Request, filename: str):
     return f"{request.base_url}static/images/{filename}"
+
+cloudinary.config(
+    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
+    api_key=os.getenv("CLOUDINARY_API_KEY"),
+    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
+    secure=True
+)
 # Create app with lifespan
 app = FastAPI(title="Smart Circular Marketplace Prototype", lifespan=lifespan)
 

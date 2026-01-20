@@ -18,12 +18,15 @@ from app.services.osm import fetch_nearby_services
 from app.ml.predict import predict_product_decision
 from app.ai_gemini import get_gemini_recommendation
 from app.schemas import AISuggestion
+import cloudinary
+import cloudinary.uploader
+
 
 
 router = APIRouter()
 security = HTTPBearer()
 # Base URL & image directory
-BACKEND_BASE = os.getenv("BACKEND_URL", "https://api.smart-circular-marketplace.com")
+BACKEND_BASE = os.getenv("BACKEND_URL", "https://smart-circular-marketplace-2.onrender.com")
 
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "..", "static", "images")
 IMAGE_DIR = os.path.abspath(IMAGE_DIR)
@@ -138,18 +141,20 @@ async def create_item(
     image_url = None
 
     if image is not None:
-        filename = image.filename or "upload.jpg"
-        _, ext = os.path.splitext(filename)
-        unique_name = f"{uuid4().hex}{ext or '.jpg'}"
-        dest_path = os.path.join(IMAGE_DIR, unique_name)
-        try:
-            with open(dest_path, "wb") as buffer:
-                shutil.copyfileobj(image.file, buffer)
-            image_url = f"/static/images/{unique_name}"
-        except Exception as e:
-            raise HTTPException(status_code=500, detail=f"Failed to save image: {e}")
-        finally:
-            image.file.close()
+    # Upload to Cloudinary
+     try:
+        result = cloudinary.uploader.upload(
+            image.file,
+            folder="marketplace_items",  # optional folder
+            public_id=str(uuid4().hex),  # unique name
+            overwrite=True,
+            resource_type="image"
+        )
+        image_url = result.get("secure_url")  # <-- full URL
+     except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Cloudinary upload failed: {e}")
+     finally:
+        image.file.close()
 
     item = ItemDB(
         title=title,
@@ -195,13 +200,13 @@ async def delete_item(item_id: int):
             raise HTTPException(status_code=404, detail="Item not found")
         # Delete image file if exists
         if item.image_url:
+    # Extract public_id from URL
+            public_id = item.image_url.split("/")[-1].split(".")[0]
             try:
-                filename = item.image_url.rsplit("/", 1)[-1]
-                path = os.path.join(IMAGE_DIR, filename)
-                if os.path.exists(path):
-                    os.remove(path)
-            except Exception:
-                pass
+              cloudinary.uploader.destroy(f"marketplace_items/{public_id}")
+            except:
+              pass
+
         session.delete(item)
         session.commit()
     return None

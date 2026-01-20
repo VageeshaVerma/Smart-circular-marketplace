@@ -5,7 +5,7 @@ import { getAuthToken } from "../utils/getAuthToken";
 
 
 // src/utils/constants.js or at top of your page/component
-const BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://smart-circular-marketplace-2.onrender.com";
+
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Marketplace({ refreshOrders }) {
@@ -114,7 +114,7 @@ export default function Marketplace({ refreshOrders }) {
             <div key={it.id} className="marketplace-card" style={{ padding: 12 }}>
               {it.image_url ? (
                 <img
-                  src={`${BASE_URL}${it.image_url}`}
+                  src={it.image_url}
                   alt={it.title}
                   className="marketplace-img"
                   style={{
