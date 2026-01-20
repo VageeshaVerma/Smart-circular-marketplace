@@ -41,6 +41,7 @@ export default function Login() {
           <button onClick={handleLogin}>Login</button>
         </div>
         <div className="auth-footer">
+          <span>email:vageeshaverma9@gmail.com password:Vageesha16@</span>
           <span>Don't have an account?</span>
           <a href="/signup">Signup</a>
         </div>
