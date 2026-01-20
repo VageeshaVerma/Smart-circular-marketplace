@@ -16,7 +16,7 @@ export default function RecentActivity({ orders, refreshOrders }) {
 
     try {
       await axios.patch(
-        `${BACKEND_URL}/orders/${orderId}`,
+        `${BACKEND_URL}/api/orders/${orderId}`,
         { status: newStatus },
         { headers: { Authorization: `Bearer ${token}` } }
       );

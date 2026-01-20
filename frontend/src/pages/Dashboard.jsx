@@ -17,7 +17,7 @@ export default function Dashboard() {
   const fetchOrders = async () => {
     try {
       const token = await getAuthToken();
-      const res = await axios.get(`${BACKEND_URL}/orders`, {
+      const res = await axios.get(`${BACKEND_URL}/api/orders`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setOrders(res.data);
@@ -28,7 +28,7 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      const res = await axios.get(`${BACKEND_URL}/impact?user_id=demo`);
+      const res = await axios.get(`${BACKEND_URL}/api/impact?user_id=demo`);
       setImpact(res.data);
     } catch (err) {
       console.error("Dashboard API error:", err);

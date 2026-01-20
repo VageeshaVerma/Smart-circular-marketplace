@@ -93,7 +93,7 @@ try {
       form.append("price", prediction?.predicted_price ?? 0);
       if (imageFile) form.append("image", imageFile);
 
-      const res = await axios.post(`${BACKEND_URL}/items`, form, {
+      const res = await axios.post(`${BACKEND_URL}/api/items`, form, {
         headers: {
           "Authorization": `Bearer ${token}`, // Send token
           "Content-Type": "multipart/form-data",

@@ -21,7 +21,7 @@ export default function Marketplace({ refreshOrders }) {
         token = null; // Not logged in
       }
 
-      const res = await axios.get(`${BACKEND_URL}/items`, {
+      const res = await axios.get(`${BACKEND_URL}/api/items`, {
         headers: token ? { Authorization: `Bearer ${token}` } : {},
       });
       setItems(res.data);
@@ -44,7 +44,7 @@ export default function Marketplace({ refreshOrders }) {
     try {
       const token = await getAuthToken(); // fresh token
 
-      await axios.delete(`${BACKEND_URL}/items/${id}`, {
+      await axios.delete(`${BACKEND_URL}/api/items/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -68,7 +68,7 @@ export default function Marketplace({ refreshOrders }) {
       const token = await getAuthToken(); // fresh token
 
       const res = await axios.post(
-        `${BACKEND_URL}/orders`,
+        `${BACKEND_URL}/api/orders`,
         { item_id: itemId, price: item.price },
         { headers: { Authorization: `Bearer ${token}` } }
       );
