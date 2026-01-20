@@ -54,7 +54,7 @@ export default function UploadForm() {
        co2_saved_estimate: res.data.co2_saved_estimate
       });
 
-
+      setPrice(res.data.predicted_price);
     } catch (err) {
       console.error(err);
       alert("Prediction failed");
@@ -90,7 +90,7 @@ try {
       form.append("age", Number(age));
       form.append("condition", condition);
       form.append("description", description || "");
-      form.append("price", prediction?.predicted_price ?? 0);
+      form.append("price", Number(price));
       if (imageFile) form.append("image", imageFile);
 
       const res = await axios.post(`${BACKEND_URL}/api/items`, form, {
@@ -219,13 +219,9 @@ try {
       <strong>Predicted Price:</strong> ₹
       <input
         type="number"
-        value={prediction.predicted_price}
-        onChange={(e) =>
-          setPrediction({
-            ...prediction,
-            predicted_price: Number(e.target.value)
-          })
-        }
+        value={price}
+        onChange={e => setPrice(Number(e.target.value))}
+        
         className="prediction-input"
       />
     </div>
