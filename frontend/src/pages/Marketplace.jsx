@@ -4,6 +4,8 @@ import axios from "axios";
 import { getAuthToken } from "../utils/getAuthToken";
 
 
+// src/utils/constants.js or at top of your page/component
+const BASE_URL = import.meta.env.VITE_BACKEND_URL || "https://smart-circular-marketplace-2.onrender.com";
 
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Marketplace({ refreshOrders }) {
