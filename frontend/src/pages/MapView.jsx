@@ -56,7 +56,7 @@ export default function MapView() {
   // Fetch nearby services
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/nearby/osm?lat=${userLocation.lat}&lng=${userLocation.lng}`)
+      .get(`${BACKEND_URL}/api/nearby/osm?lat=${userLocation.lat}&lng=${userLocation.lng}`)
       .then((res) => {
         // Sort by nearest first
         const sorted = res.data.sort((a, b) => a.distance_km - b.distance_km);

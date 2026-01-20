@@ -4,6 +4,7 @@ import axios from "axios";
 import { getAuthToken } from "../utils/getAuthToken";
 
 
+
 const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 export default function Marketplace({ refreshOrders }) {
   const [items, setItems] = useState([]);
@@ -111,7 +112,7 @@ export default function Marketplace({ refreshOrders }) {
             <div key={it.id} className="marketplace-card" style={{ padding: 12 }}>
               {it.image_url ? (
                 <img
-                  src={it.image_url}
+                  src={`https://api.smart-circular-marketplace.com${it.image_url}`}
                   alt={it.title}
                   className="marketplace-img"
                   style={{

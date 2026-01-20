@@ -23,7 +23,7 @@ from app.schemas import AISuggestion
 router = APIRouter()
 security = HTTPBearer()
 # Base URL & image directory
-BACKEND_BASE = os.getenv("BACKEND_URL", "http://localhost:8000")
+BACKEND_BASE = os.getenv("BACKEND_URL", "https://api.smart-circular-marketplace.com")
 
 IMAGE_DIR = os.path.join(os.path.dirname(__file__), "..", "static", "images")
 IMAGE_DIR = os.path.abspath(IMAGE_DIR)
@@ -145,7 +145,7 @@ async def create_item(
         try:
             with open(dest_path, "wb") as buffer:
                 shutil.copyfileobj(image.file, buffer)
-            image_url = f"{BACKEND_BASE}/static/images/{unique_name}"
+            image_url = f"/static/images/{unique_name}"
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to save image: {e}")
         finally:
