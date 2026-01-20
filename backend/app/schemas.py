@@ -15,7 +15,9 @@ class ItemResponse(ItemCreate):
 
 class AISuggestion(BaseModel):
     predicted_price: float
-    recommendation: str
+    action: Literal["RESELL", "REPAIR", "RECYCLE"]
+    explanation: str
+    co2_saved_estimate: float
 
 class Service(BaseModel):
     name: str

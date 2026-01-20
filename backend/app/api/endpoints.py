@@ -66,11 +66,10 @@ class ProductInput(BaseModel):
     adjusted_price: Optional[float] = None 
 
 # 🔹 FRONTEND AI ENDPOINT
-@router.post("/ai/predict", response_model=AISuggestion)
+@router.post("/api/ai/predict", response_model=AISuggestion)
 async def ai_predict(payload: AIPredictRequest):
-    
 
-    # Step 1: Call the prediction function
+    # Step 1: Call ML / rule-based decision engine
     result = predict_product_decision(
         category=payload.category,
         price=payload.price,
@@ -79,40 +78,49 @@ async def ai_predict(payload: AIPredictRequest):
         co2_kg=payload.co2_kg
     )
 
-    # Step 2: Optional override from frontend
-    if payload.adjusted_price is not None:
-        result["predicted_resale_value"] = payload.adjusted_price
-
-    # Step 3: Safely access predicted price
+    # Step 2: Extract values safely
     predicted_price = result.get("predicted_resale_value")
-    if predicted_price is None:
-        # Fallback if AI/model fails
+    action = result.get("recommendation")
+    co2_saved = result.get("co2_saved_estimate", 0)
+
+    # Step 3: Optional frontend override
+    if payload.adjusted_price is not None:
+        predicted_price = payload.adjusted_price
+
+    # Step 4: Hard fallback (model failure safety)
+    if predicted_price is None or action is None:
         predicted_price = payload.price * 0.8
-        recommendation = "Fallback recommendation: item in good condition, sell soon"
-        co2_saved_estimate = payload.co2_kg * 0.7
+        action = "RESELL"
+        co2_saved = payload.co2_kg * 0.7
+        explanation = "The item appears usable and resale helps recover value while reducing waste."
     else:
-        recommendation = result.get("recommendation", "")
-        co2_saved_estimate = result.get("co2_saved_estimate", 0)
+        # Step 5: Gemini = explanation ONLY
+        prompt = (
+            f"The system decided to {action} this product.\n"
+            f"Category: {payload.category}\n"
+            f"Condition: {payload.condition}\n"
+            f"Age: {payload.age} years\n"
+            f"Predicted resale price: ₹{predicted_price}\n\n"
+            f"Explain this recommendation in one clear sentence for a user."
+        )
 
-    # Step 4: Call OpenAI API safely
-    ai_suggestion = recommendation  # default to model/fallback
-    prompt = (
-        f"Provide a one-line suggestion for this item: "
-        f"Category='{payload.category}', "
-        f"Condition='{payload.condition}', Age={payload.age}"
-    )
-    try:
-        ai_suggestion = get_gemini_recommendation(prompt)
-    except Exception as e:
-        print("OpenAI API error:", e)
-        # Keep previous fallback recommendation if AI fails
+        try:
+            explanation = get_gemini_recommendation(prompt)
+        except Exception as e:
+            print("Gemini API error:", e)
+            explanation = (
+                f"The item condition and age indicate that {action.lower()} "
+                f"is the most sustainable option."
+            )
 
-    # Step 5: Return response
+    # Step 6: Final response
     return {
         "predicted_price": predicted_price,
-        "recommendation": ai_suggestion,
-        "co2_saved_estimate": co2_saved_estimate
+        "action": action,
+        "explanation": explanation,
+        "co2_saved_estimate": co2_saved
     }
+
 
 # --- Create item (multipart/form-data, optional image) ---
 @router.post("/items", status_code=status.HTTP_201_CREATED, response_model=ItemDB)
