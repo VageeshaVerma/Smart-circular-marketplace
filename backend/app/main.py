@@ -26,7 +26,7 @@ app = FastAPI(title="Smart Circular Marketplace Prototype", lifespan=lifespan)
 
 # --- CORS configuration ---
 origins = [
-    "https://smart-circular-marketplace-mztm05fvb.vercel.app",
+    "https://smart-circular-marketplace-pveh.vercel.app",
     "http://localhost:5173",  # React frontend
     "http://localhost:3000",
     "http://127.0.0.1:5173"
