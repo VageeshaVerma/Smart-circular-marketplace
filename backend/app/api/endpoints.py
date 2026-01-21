@@ -307,3 +307,6 @@ def predict_product(data: ProductInput):
         age=data.age,
         co2_kg=data.co2_kg
     )
+@router.get("/health")
+def health():
+    return {"status": "ok"}
